@@ -84,6 +84,12 @@ function launchpad(thread: GmailThread) {
         thread.addLabel(label);
         thread.moveToArchive();
         return true;
+    } else if (lp_notification_type && lp_notification_type == "livefs-build-status") {
+        const label:GmailLabel = get_or_create_label("launchpad/livefs-build");
+        console.log("---> launchpad livefs-build detected");
+        thread.addLabel(label);
+        thread.moveToArchive();
+        return true;
     } else if (lp_notification_type && lp_notification_type == "snap-build-status") {
         const label:GmailLabel = get_or_create_label("launchpad/snap-build");
         console.log("---> launchpad snap-build detected");
