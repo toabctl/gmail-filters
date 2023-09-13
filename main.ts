@@ -124,6 +124,29 @@ function jira(thread: GmailThread) {
  */
 function aws(thread: GmailThread) {
     const msg: GmailMessage = thread.getMessages()[0];
+
+    // mails like "[Cpc-aws] Offers: Customer accepted offer!"
+    const regex: RegEx = /^\[Cpc-aws\] Offers: Customer accepted/;
+    const match = msg.getSubject().match(regex);
+    if(match) {
+        console.log("---> aws marketplace offers detected")
+        const label:GmailLabel = get_or_create_label("aws/marketplace/offers");
+        thread.addLabel(label);
+        thread.moveToArchive();
+        return true;
+    }
+
+    // mails like "AWS Marketplace - New Daily Customer Subscriber Report available"
+    const regex: RegEx = /^AWS Marketplace - New Daily .*/;
+    const match = msg.getSubject().match(regex);
+    if(match) {
+        console.log("---> aws marketplace report detected")
+        const label:GmailLabel = get_or_create_label("aws/marketplace/reports");
+        thread.addLabel(label);
+        thread.moveToArchive();
+        return true;
+    }
+
     const regex: RegEx = /no-reply@marketplace.aws/;
     const match = msg.getFrom().match(regex);
     if(match) {
